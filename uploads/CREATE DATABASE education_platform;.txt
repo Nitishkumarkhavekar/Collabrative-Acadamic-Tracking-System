@@ -1,0 +1,56 @@
+CREATE DATABASE education_platform;
+USE education_platform;
+
+-- Faculty Table
+CREATE TABLE faculty (
+    faculty_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+-- Student Table
+CREATE TABLE student (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+-- Attendance Table
+CREATE TABLE attendance (
+    attendance_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    date DATE NOT NULL,
+    status ENUM('Present', 'Absent', 'Late') NOT NULL,
+    FOREIGN KEY (student_id) REFERENCES student(student_id) ON DELETE CASCADE
+);
+
+-- Marks Table
+CREATE TABLE marks (
+    marks_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    subject VARCHAR(50) NOT NULL,
+    marks_obtained INT NOT NULL,
+    total_marks INT NOT NULL,
+    exam_type ENUM('Midterm', 'Final', 'Quiz') NOT NULL,
+    FOREIGN KEY (student_id) REFERENCES student(student_id) ON DELETE CASCADE
+);
+
+-- Gate Pass Table
+CREATE TABLE gate_pass (
+    pass_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    reason TEXT NOT NULL,
+    issue_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('Approved', 'Pending', 'Rejected') NOT NULL,
+    FOREIGN KEY (student_id) REFERENCES student(student_id) ON DELETE CASCADE
+);
+CREATE TABLE student_queries (
+    query_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    query_text TEXT NOT NULL,
+    response TEXT DEFAULT NULL,
+    status ENUM('Pending', 'Resolved') DEFAULT 'Pending',
+    FOREIGN KEY (student_id) REFERENCES student_information(student_id) ON DELETE CASCADE
+);
